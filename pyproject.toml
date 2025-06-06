@@ -1,16 +1,14 @@
 [project]
-name = "KernelModeDecomposition1D"
-version = "1.0.0"
-
-requires-python = ">=3.7"
-dependencies = [
-  "matplotlib",
-  "numpy",
-  "scipy",
+name            = "kmd"
+version         = "0.1.0"
+description     = "Kernel-Mode Decomposition for 1-D signals"
+requires-python = ">=3.9,<3.13"   # 3.9+ gives you type-hint generics everywhere
+dependencies    = [
+    "numpy>=1.26",      # 1.26 still supports 3.12, removes np.* aliases
+    "scipy>=1.11",
+    "matplotlib>=3.8",
 ]
 
-[tool.setuptools]
-include-package-data = true
-
-[tool.setuptools.packages.find]
-include = ["."]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"   # simplest backend—no distutils!
