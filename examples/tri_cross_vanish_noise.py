@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 
-import KMD_lib
+import kmd as KMD_lib          
 np.random.seed(0)
 
 
