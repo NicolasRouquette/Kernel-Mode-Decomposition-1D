@@ -1,13 +1,16 @@
-import numpy as np
 import math
-from numpy import linalg as LA
+
 import matplotlib
+import numpy as np
+from numpy import linalg as LA
+
 matplotlib.use('TkAgg')
-from matplotlib import pyplot as plt
-import time
-import scipy.signal as scisig
 import copy
+import time
+
 import scipy.optimize
+import scipy.signal as scisig
+from matplotlib import pyplot as plt
 from scipy.interpolate import CubicSpline
 
 
@@ -155,7 +158,7 @@ def make_gabor_waves(t_mesh2, omega_mesh, alpha):
 
 def phase_modtosmooth(phase):
     #converts phase from [-pi, pi] to continuous
-    phase = phase.reshape((-1))
+    phase = phase.reshape(-1)
     for t_indx in range(phase.shape[0] - 1):
         if np.abs(phase[t_indx + 1] - phase[t_indx]) > math.pi:
             phase[t_indx + 1:] -= ((phase[t_indx + 1] - phase[t_indx] + math.pi) // (2 * math.pi)) * (2 * math.pi)
@@ -176,7 +179,7 @@ def max_squeeze_refine(t_mesh, omega_mesh, signal, t_indx, alpha):
     t0 = t_mesh[t_indx]
 
     W_t = np.zeros((omega_N, 2))
-    E_t = np.zeros((omega_N))
+    E_t = np.zeros(omega_N)
 
     for omega_indx in range(omega_N):
         omega = omega_mesh[omega_indx]
@@ -209,7 +212,7 @@ def loc_wave(t_mesh, wave_params, modes, t_indx):
     N = t_mesh.shape[0]
 
     t0 = t_mesh[t_indx]
-    loc_sig = np.zeros((N))
+    loc_sig = np.zeros(N)
 
     for mode_indx in range(modes.shape[0]):
         omega = modes[mode_indx, t_indx, 0, 0]
@@ -258,9 +261,9 @@ def compute_E_fast(t_mesh, omega_mesh, wave_params, sig_full, final_modes, temp_
     t_mesh2 = np.arange(2 * tL, 2 * tU + ss, ss)
 
     E_full = np.zeros((omega_N, N))
-    E_max_t = np.zeros((N))
-    E_stop = np.zeros((N))
-    min_freq = np.zeros((N))
+    E_max_t = np.zeros(N)
+    E_stop = np.zeros(N)
+    min_freq = np.zeros(N)
 
     for mode_indx in range(final_modes.shape[0]):
         for t_i in range(N):
@@ -389,7 +392,7 @@ def get_raw_mode_fast(t_mesh, omega_mesh, wp, sig, final_modes, temp_modes, E_th
     E = compute_E_fast(t_mesh, omega_mesh, wp, sig, final_modes, temp_modes, E_thresh, alpha)
 
 
-    omega_max = np.zeros((N))
+    omega_max = np.zeros(N)
 
     #max_peak = np.zeros((3 * N - 2))
     t_indx = 0
@@ -526,7 +529,7 @@ def mode_consolidate(t_mesh, omega_mesh, wave_params, sig, temp_modes, modes_all
         t_min = int(modes_bound[mode_indx, mode_t_min, 0, 1])
         t_max = int(modes_bound[mode_indx, mode_t_max, 0, 1])
 
-        t_mesh_i = np.zeros((mode_t_max - mode_t_min + 1))
+        t_mesh_i = np.zeros(mode_t_max - mode_t_min + 1)
 
         for t_i in range(mode_t_min, mode_t_max + 1):
             t_mesh_i[t_i - mode_t_min] = t_mesh[int(modes_bound[mode_indx, t_i, 0, 1])]
@@ -559,7 +562,7 @@ def mode_consolidate(t_mesh, omega_mesh, wave_params, sig, temp_modes, modes_all
         omega_low = modes_bound[0, mode_t_min, 0, 0]
         omega_high = modes_bound[-1, mode_t_max, 0, 0]
 
-        mode_keep = np.zeros((modes_bound.shape[0]))
+        mode_keep = np.zeros(modes_bound.shape[0])
 
         for mode_indx in range(modes_bound.shape[0]):
             mode_t_min = np.min(np.nonzero(modes_bound[mode_indx, :, 0, 0])[0])
@@ -878,15 +881,15 @@ def final_mode_group3(t_mesh, wave_params, signal, modes, temp_modes, rot, alpha
 
 
     else:
-        num_modes_t = np.zeros((N))
+        num_modes_t = np.zeros(N)
         for mode_indx in range(modes.shape[0]):
             for t_indx in range(N):
                 if modes[mode_indx, t_indx, 0, 0] != 0:
                     num_modes_t[t_indx] += 1
 
         if np.max(num_modes_t) == 1:
-            mode_indx_low = np.zeros((modes.shape[0]))
-            mode_indx_high = np.zeros((modes.shape[0]))
+            mode_indx_low = np.zeros(modes.shape[0])
+            mode_indx_high = np.zeros(modes.shape[0])
 
             for mode_indx in range(modes.shape[0]):
                 mode_indx_low[mode_indx] = np.min(np.nonzero(modes[mode_indx, :, 0, 0])[0])
@@ -904,14 +907,14 @@ def final_mode_group3(t_mesh, wave_params, signal, modes, temp_modes, rot, alpha
                 if num_modes_t[t_indx] > 1:
                     modes[:, t_indx] *= 0
 
-            num_modes_t = np.zeros((N))
+            num_modes_t = np.zeros(N)
             for mode_indx in range(modes.shape[0]):
                 for t_indx in range(N):
                     if modes[mode_indx, t_indx, 0, 0] != 0:
                         num_modes_t[t_indx] += 1
 
-            mode_indx_low = np.zeros((modes.shape[0]))
-            mode_indx_high = np.zeros((modes.shape[0]))
+            mode_indx_low = np.zeros(modes.shape[0])
+            mode_indx_high = np.zeros(modes.shape[0])
 
             for mode_indx in range(modes.shape[0]):
                 mode_indx_low[mode_indx] = np.min(np.nonzero(modes[mode_indx, :, 0, 0])[0])
@@ -1161,7 +1164,7 @@ def learn_waveform0(t_mesh, sig, fmodes, final_mode_i, wave_params, num_overtone
             quiet_ker_w, quiet_ker_v = mama_ker_eig(chiT, 0.0001)
 
             invQsig = np.dot(quiet_ker_v.T, sig_iter[int_low:int_high])
-            invQsig = invQsig.reshape((-1)) * quiet_ker_w.reshape((-1))
+            invQsig = invQsig.reshape(-1) * quiet_ker_w.reshape(-1)
             invQsig = np.dot(quiet_ker_v, invQsig.reshape((-1, 1)))
 
             for ov_indx in range(2 * num_overtones - 1):
@@ -1279,7 +1282,7 @@ def learn_waveform_final(t_mesh, sig_full, fmodes, mode_inter, wp, alpha):
     return wp
 
 
-def semimanual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), thr=0.005, thr_en=0.1, ref_fin=False):
+def semimanual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros(1), thr=0.005, thr_en=0.1, ref_fin=False):
     #t_mesh: time mesh of signal (evenly spaced increments)
     #signal: the signal to be decomposed into modes
     #alpha: the width of the Gaussian window
@@ -1295,7 +1298,7 @@ def semimanual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), t
 
     N = signal.shape[0]
     if t_mesh.shape[0] != N:
-        t_mesh = np.arange((N)) * 2.0 / N
+        t_mesh = np.arange(N) * 2.0 / N
         t_mesh -= np.mean(t_mesh)
     t_mesh -= np.mean(t_mesh)
     ss = t_mesh[1] - t_mesh[0]
@@ -1376,7 +1379,7 @@ def semimanual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), t
                                 cond_manual = True
                                 num_modes += 1
                                 modes_i = modes_c[mode_i:mode_i + 1]
-                                rot = np.zeros((0))
+                                rot = np.zeros(0)
                                 final_modes_i = final_mode_group3(t_mesh, wp, signal, modes_i, tmodes, rot, alpha)
 
                                 if wave_params[0] != "unk":
@@ -1388,7 +1391,7 @@ def semimanual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), t
                                 fm = np.concatenate((fm, final_modes_i), axis=0)
                 if fm.shape[0] > 0:
                     mode_cov = np.zeros((N), dtype=np.int)
-                    mode_len = np.zeros((fm.shape[0]))
+                    mode_len = np.zeros(fm.shape[0])
 
                     for i in range(fm.shape[0]):
                         low_stop = int(fm[i, 0, 3])
@@ -1437,7 +1440,7 @@ def semimanual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), t
                             for mode_indx2 in range(user_input[mode_i].shape[0]):
                                 modes_i[mode_indx2] = modes_full[user_input[mode_i][mode_indx2]]
 
-                            rot = np.zeros((user_input[mode_i].shape[0]))
+                            rot = np.zeros(user_input[mode_i].shape[0])
                             final_modes_i[mode_i] = final_mode_group3(t_mesh, wp, signal, modes_i, tmodes, rot, alpha)
 
                             if wave_params[0] != "unk":
@@ -1471,7 +1474,7 @@ def semimanual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), t
 
     return fmodes, wp
 
-def manual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), thr=0.005, thr_en=0.1, ref_fin=False):
+def manual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros(1), thr=0.005, thr_en=0.1, ref_fin=False):
     #t_mesh: time mesh of signal (evenly spaced increments)
     #signal: the signal to be decomposed into modes
     #alpha: the width of the Gaussian window
@@ -1488,7 +1491,7 @@ def manual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), thr=0
 
     N = signal.shape[0]
     if t_mesh.shape[0] != N:
-        t_mesh = np.arange((N)) * 2.0 / N
+        t_mesh = np.arange(N) * 2.0 / N
         t_mesh -= np.mean(t_mesh)
     t_mesh -= np.mean(t_mesh)
     num_ov = 0
@@ -1574,7 +1577,7 @@ def manual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), thr=0
                         for mode_indx2 in range(user_input[mode_indx].shape[0]):
                             modes_i[mode_indx2] = modes_full[user_input[mode_indx][mode_indx2]]
 
-                        rot = np.zeros((user_input[mode_indx].shape[0]))
+                        rot = np.zeros(user_input[mode_indx].shape[0])
                         final_modes_i[mode_indx] = final_mode_group3(t_mesh, wp, signal, modes_i, tmodes, rot, alpha)
 
                         if wave_params[0] != "unk":
@@ -1611,7 +1614,7 @@ def manual_maxpool_peel2(signal, wave_p=0, alpha=25, t_mesh=np.zeros((1)), thr=0
 
 def rot_check(micloc, low_stop, high_stop):
     #checks whether the micro-local KMD estimate has no rotations
-    bad_sin_flip = np.zeros((micloc.shape[0]))
+    bad_sin_flip = np.zeros(micloc.shape[0])
 
     for t_indx in range(low_stop, high_stop - 1):
         if micloc[t_indx, 1] * micloc[t_indx + 1, 1] <= 0 and micloc[t_indx, 0] < 0:
@@ -1683,7 +1686,7 @@ def opt_final10(t_mesh, sig_full, fmodes, wp, thresh, win_size, alpha, min_alpha
             low_stop2 = int(ls + 12 * math.pi / (omega_low * ss))
             high_stop2 = int(hs - 12 * math.pi / (omega_high * ss))
 
-            sig_comp = np.zeros((N))
+            sig_comp = np.zeros(N)
             for comp_indx2 in range(num_comps):
                 if wp.w[0] == "unk":
                     wave_params = ["custom", wp.f[comp_indx2]]
