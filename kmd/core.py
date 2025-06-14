@@ -491,6 +491,9 @@ def mode_consolidate(t_mesh, omega_mesh, wave_params, sig, temp_modes, modes_all
     modes_all = modes_all.reshape((-1, 2, 2))
 
     modes_bound = np.zeros((0, modes_all.shape[0], 2, 2))
+    if modes_bound.shape[0] == 0:
+        return np.zeros((0, N, 2, 2))
+    
     t_low = 0
     t_high = 0
 
