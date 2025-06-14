@@ -83,3 +83,11 @@ Note that the two sequences only identifies the lowest two intersecting frequenc
 *tri_cross_vanish_noise2.py*:
 
 0, Done, 1, 3, Done ... 0, 4, Next, 1, 2, Done ...
+
+# Usage
+
+```shell
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
