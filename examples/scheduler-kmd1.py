@@ -13,5 +13,8 @@ scheduler_data: np.ndarray = np.loadtxt(fname=s1, delimiter=',', skiprows=1)
 assert scheduler_data.ndim == 2
 print(scheduler_data)
 
-result = KMD_lib.semimanual_maxpool_peel2(signal=scheduler_data)
+# Extract the signal column (assume column 1 is time, column 2 is value)
+signal = scheduler_data[:, 1]
+
+result = KMD_lib.semimanual_maxpool_peel2(signal=signal)
 print(result)
