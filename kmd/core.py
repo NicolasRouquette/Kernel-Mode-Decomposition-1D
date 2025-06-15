@@ -280,7 +280,7 @@ def compute_E_fast(t_mesh, omega_mesh, wave_params, sig_full, final_modes, temp_
     for om_i in range(omega_N):
         omega = omega_mesh[om_i]
         cr = omega_compress_ratio(ss, omega)
-        if om_i % (omega_N // 20) == 0: print(str(round((100 * om_i) / omega_N)) + "%", cr, time.localtime())
+        if om_i % (omega_N // 20) == 0: print(str(round((100 * om_i) / omega_N)) + "%", cr)
 
 
         bounds = int(5.0 * alpha / (omega * ss))
