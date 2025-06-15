@@ -107,7 +107,10 @@ signals[3] = np.random.normal(0, 0.5, size=(N))
 signal = np.asarray(signals[0] + signals[1] + signals[2] + signals[3])
 
 Comp_data_full, wp = KMD_lib.semimanual_maxpool_peel2(signal, wave_params, alpha, t_mesh, 0.005, 0.1, ref_fin=False)
-
+print("Comp_data_full shape:", Comp_data_full.shape)
+if Comp_data_full.shape[0] == 0:
+    print("No modes were identified. Try adjusting alpha, thresh, or thresh_en.")
+    exit(1)
 
 plt.plot(t_mesh, Comp_data_full[0, :, 0] * KMD_lib.wave(wave_params, Comp_data_full[0, :, 1]), label=r"$v_{1,e}$")
 plt.plot(t_mesh, signals[0], label=r"$v_1$")

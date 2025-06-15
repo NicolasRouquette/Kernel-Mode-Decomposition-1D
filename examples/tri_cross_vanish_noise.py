@@ -98,6 +98,10 @@ signal = np.asarray(signals[0] + signals[1] + signals[2] + signals[3])
 Comp_data_full, wp = KMD_lib.semimanual_maxpool_peel2(signal, wave_params, alpha, t_mesh, 0.005, 0.1, ref_fin=False)
 
 num_modes = Comp_data_full.shape[0]
+if num_modes == 0:
+    print("No modes found.")
+    exit(1)
+
 for i in range(num_modes):
     j = i
     if i == 0:
