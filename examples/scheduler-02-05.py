@@ -32,27 +32,33 @@ thr_ens = [0.01, 0.05, 0.1, 0.2]
 best_params = None
 max_modes = 0
 
-for alpha in alphas:
-    for thr in thrs:
-        for thr_en in thr_ens:
-            try:
-                Comp_data_full, wp = KMD_lib.semimanual_maxpool_peel2(
-                    signal=scheduling_iteration_2_1, wave_p=wave_p, alpha=alpha, t_mesh=t_mesh,
-                    thr=thr, thr_en=thr_en, ref_fin=ref_fin
+# for alpha in alphas:
+#     for thr in thrs:
+#         for thr_en in thr_ens:
+#             try:
+#                 Comp_data_full, wp = KMD_lib.semimanual_maxpool_peel2(
+#                     signal=scheduling_iteration_2_1, wave_p=wave_p, alpha=alpha, t_mesh=t_mesh,
+#                     thr=thr, thr_en=thr_en, ref_fin=ref_fin
+#                 )
+#                 num_modes = Comp_data_full.shape[0]
+#                 print(f"alpha={alpha}, thr={thr}, thr_en={thr_en} => modes: {num_modes}")
+#                 if num_modes > max_modes:
+#                     max_modes = num_modes
+#                     best_params = (alpha, thr, thr_en)
+#             except Exception as e:
+#                 print(f"alpha={alpha}, thr={thr}, thr_en={thr_en} => error: {e}")
+
+Comp_data_full, wp = KMD_lib.semimanual_maxpool_peel2(
+                    signal=scheduling_iteration_2_1, alpha=2.0
                 )
-                num_modes = Comp_data_full.shape[0]
-                print(f"alpha={alpha}, thr={thr}, thr_en={thr_en} => modes: {num_modes}")
-                if num_modes > max_modes:
-                    max_modes = num_modes
-                    best_params = (alpha, thr, thr_en)
-            except Exception as e:
-                print(f"alpha={alpha}, thr={thr}, thr_en={thr_en} => error: {e}")
+num_modes = Comp_data_full.shape[0]
+max_modes = num_modes
 
-print(f"{scheduling_iteration_1_0=}")
-print(f"{scheduling_iteration_1_1=}")
-print(f"{scheduling_iteration_2_1=}")
+# print(f"{scheduling_iteration_1_0=}")
+# print(f"{scheduling_iteration_1_1=}")
+# print(f"{scheduling_iteration_2_1=}")
 
-print(f"Best params: {best_params} with {max_modes} modes")
+# print(f"Best params: {best_params} with {max_modes} modes")
 
 if max_modes == 0:
     print("No modes found.")
